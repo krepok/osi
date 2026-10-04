@@ -38,14 +38,12 @@ DWORD WINAPI minMax(LPVOID data)
 DWORD WINAPI average(LPVOID data)
 {
     int* temp = (int*)data;
-    double av{};
 
-    for (int i = 0; i < n; i++)
-    {
-        av += temp[i];
-        Sleep(12);
-    }
-    av = av / n;
+    HMODULE hLib = LoadLibrary("lib.dll");
+    double(*func)(const int*, int) = (double (*)(const int*, int))GetProcAddress(hLib, "findAv");
+
+    double av = func(temp, n);
+    FreeLibrary(hLib);
     
     cAv = av;
     std::cout << "Average: " << av << '\n';
